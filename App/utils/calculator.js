@@ -2,13 +2,25 @@ export const initialState = {
   currentValue: "0",
   operator: null,
   previousValue: null,
+  pointCounter: 0,
 };
 
 export const handleNum = (state, value) => {
-  if (state === "0") {
+  if (state.currentValue === "0" && value !== ".") {
     return {
       ...state,
       currentValue: `${value}`,
+    };
+  }
+  if (value === "." && state.pointCounter !== 0) {
+    console.log("pointCounter", state.pointCounter);
+    return state;
+  }
+  if (value === ".") {
+    return {
+      ...state,
+      currentValue: `${state.currentValue}${value}`,
+      pointCounter: 1,
     };
   }
   return {
@@ -24,6 +36,7 @@ export const handleEqual = (state) => {
   const resetState = {
     operator: null,
     previousValue: null,
+    pointCounter: 0,
   };
   switch (operator) {
     case "/":
@@ -78,6 +91,7 @@ const calculator = (type, value, state) => {
         operator: value,
         previousValue: state.currentValue,
         currentValue: "0",
+        pointCounter: 0,
       };
     case "equal":
       return handleEqual(state);
